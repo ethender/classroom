@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.10.2.xsd">
+
+
+	<mongo:mongo host="127.0.0.1" port="27017"/>
+	
+	 <mongo:mongo>
+	  <mongo:options connections-per-host="100"
+	   threads-allowed-to-block-for-connection-multiplier="5"
+	            max-wait-time="120000000"
+	            connect-timeout="10000000"
+	            socket-keep-alive="true"
+	            socket-timeout="15000000"
+	            auto-connect-retry="true"/>
+	 </mongo:mongo>
+	 
+	 <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+       	<constructor-arg ref="mongo"/>
+     	<constructor-arg name="databaseName" value="classroomdev"/>
+     </bean>
+</beans>

@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
+
+
 @Service("lectureservice")
 @SuppressWarnings("unchecked")
 public class LectureServiceImpl implements LectureService{

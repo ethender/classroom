@@ -19,7 +19,7 @@ public class LectureController {
 	@Autowired
 	private VideoServiceImpl videoservice;
 
-	@RequestMapping(path="/lectureupload",headers="multipart/form-data",method=RequestMethod.POST)
+	@RequestMapping(path="/lectureupload",headers="Content-Type= multipart/form-data",method=RequestMethod.POST)
 	public @ResponseBody String getUploadVideo(@RequestParam("file") MultipartFile file) {
 		System.out.println("comming to upload video");
 		return videoservice.uploadVideo(file);

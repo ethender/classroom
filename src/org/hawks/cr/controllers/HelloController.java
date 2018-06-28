@@ -2,8 +2,11 @@ package org.hawks.cr.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import java.io*;
+import java.io.*;
 
 @Controller
 public class HelloController {
@@ -21,7 +24,7 @@ public class HelloController {
 				System.out.println("FileName: "+file.getOriginalFilename());
 				System.out.println("File Contenet: "+file.getContentType());
 				byte[] bytes = file.getBytes();
-				File f = new File("D:\\fileupload.txt");
+				File f = new File("/Users/ethender/Sites/uploads/"+file.getOriginalFilename());
 				BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(f));
 				bo.write(bytes);
 				bo.close();

@@ -116,9 +116,11 @@ public class VideoServiceImpl implements VideoService{
 	
 	private File uploadFile(MultipartFile mul) {
 		try {
-			String fileName = org.hawks.utils.util.removeSpecialChars(mul.getOriginalFilename());
+			String originalFileName = mul.getOriginalFilename();
+			String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
+			String fileName = org.hawks.utils.util.removeSpecialChars(originalFileName.substring(0, originalFileName.lastIndexOf('.')));
 			String finalFileName = fileName+System.nanoTime();
-			File file = new File(FILELOCATION+"/"+finalFileName);
+			File file = new File(FILELOCATION+"/"+finalFileName+extension);
 			BufferedOutputStream buff = new BufferedOutputStream(new FileOutputStream(file));
 			buff.write(mul.getBytes());
 			buff.close();

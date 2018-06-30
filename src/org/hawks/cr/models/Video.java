@@ -10,11 +10,14 @@ public class Video {
 	private String _id;
 	private String classRef;
 	private String lecRef;
-	private String videoLoc;
+	private String videoRef;
 	private int views;
 	private Date createdDate;
 	private Date lastModified;
 	private String owner;
+
+	
+
 	public String get_id() {
 		return _id;
 	}
@@ -33,11 +36,11 @@ public class Video {
 	public void setLecRef(String lecRef) {
 		this.lecRef = lecRef;
 	}
-	public String getVideoLoc() {
-		return videoLoc;
+	public String getVideoRef() {
+		return videoRef;
 	}
-	public void setVideoLoc(String videoLoc) {
-		this.videoLoc = videoLoc;
+	public void setVideoRef(String videoRef) {
+		this.videoRef = videoRef;
 	}
 	public int getViews() {
 		return views;
@@ -63,6 +66,7 @@ public class Video {
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -73,7 +77,8 @@ public class Video {
 		result = prime * result + ((lastModified == null) ? 0 : lastModified.hashCode());
 		result = prime * result + ((lecRef == null) ? 0 : lecRef.hashCode());
 		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
-		result = prime * result + ((videoLoc == null) ? 0 : videoLoc.hashCode());
+		result = prime * result + ((videoRef == null) ? 0 : videoRef.hashCode());
+	
 		result = prime * result + views;
 		return result;
 	}
@@ -116,21 +121,25 @@ public class Video {
 				return false;
 		} else if (!owner.equals(other.owner))
 			return false;
-		if (videoLoc == null) {
-			if (other.videoLoc != null)
+		if (videoRef == null) {
+			if (other.videoRef != null)
 				return false;
-		} else if (!videoLoc.equals(other.videoLoc))
+		} else if (!videoRef.equals(other.videoRef))
 			return false;
+		
 		if (views != other.views)
 			return false;
 		return true;
 	}
 	@Override
 	public String toString() {
-		return "Video [_id=" + _id + ", classRef=" + classRef + ", lecRef=" + lecRef + ", videoLoc=" + videoLoc
+		return "Video [_id=" + _id + ", classRef=" + classRef + ", lecRef=" + lecRef + ", videoRef=" + videoRef
 				+ ", views=" + views + ", createdDate=" + createdDate + ", lastModified=" + lastModified + ", owner="
 				+ owner + "]";
 	}
+	
+	
+	
 	
 	
 	

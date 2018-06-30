@@ -8,9 +8,11 @@ import java.util.concurrent.Future;
 import org.hawks.cr.daoimpl.DAOImpl;
 import org.hawks.cr.models.Upload;
 import org.hawks.cr.models.Video;
-import org.hawks.cr.models.VideoRequest;
 import org.hawks.cr.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,12 +26,17 @@ public class VideoServiceImpl implements VideoService{
 	private String FILELOCATION = "/Users/ethender/Sites/uploads";
 	private String DATABASEUPLOAD = "http://localhost/~ethender/uploads/";
 	
+	
+	/**
+	 * Create the video  record
+	 */
 	public Video createVideo(Video request) {
 		Video result = null;
 		try {
 			ExecutorService service = org.hawks.utils.util.getExecutor();
 			Future<Video> runnable = service.submit(()->{
-				return null;
+				dao.create(request);
+				return request;
 			});
 			result = runnable.get();
 		}catch(InterruptedException | ExecutionException ex) {
@@ -41,47 +48,138 @@ public class VideoServiceImpl implements VideoService{
 	
 	
 	
-	@Override
+	/**
+	 * Update the video record 
+	 * Only Updates videoref
+	 */
 	public Video updateVideo(Video rquest) {
-		// TODO Auto-generated method stub
-		return null;
+		Video result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<Video> runnable = service.submit(()->{
+				Query query  = new Query(Criteria.where("_id").is(rquest.get_id()));
+				Update update  =  new Update();
+				update.set("videoRef", rquest.getVideoRef());
+				update.set("lastModified", org.hawks.utils.util.getDateNow());
+				dao.update(query, update, Video.class);
+				return rquest;
+			});
+			result = runnable.get();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
 	}
 
-	@Override
+	/**
+	 * Gets the video by reference name
+	 */
 	public Video readVideoByRef(String ref) {
-		// TODO Auto-generated method stub
-		return null;
+		Video result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<Video> runnable = service.submit(()->{
+				Query query = new Query(Criteria.where("_id").is(ref));
+				return (Video) dao.readWithQuery(query, Video.class);
+			});
+			result = runnable.get();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
 	}
 
-	@Override
+	/**
+	 * Gets the Video List by lecture ref
+	 */
 	public List<Video> readVideoByLectures(Video video) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Video> result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<List<Video>> runnable = service.submit(()->{
+				Query query = new Query(Criteria.where("lecRef").is(video.getLecRef()));
+				return (List<Video>) dao.readWithQuery(query, Video.class);
+			});
+			result = runnable.get();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
 	}
 
-	@Override
+	/**
+	 * Gets the Video by Class ref 
+	 */
 	public List<Video> readVideoByClass(Video video) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Video> result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<List<Video>> runnable = service.submit(()->{
+				Query query = new Query(Criteria.where("classRef").is(video.getClassRef()));
+				return (List<Video>) dao.readWithQuery(query, Video.class);
+			});
+			result = runnable.get();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
 	}
 
-	@Override
+	
+	/**
+	 * Deletes the video ref
+	 */
 	public Video deleteVideo(Video video) {
-		// TODO Auto-generated method stub
-		return null;
+		Video result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<Video> runnable = service.submit(()->{
+				dao.delete(video);
+				return video;
+			});
+			result = runnable.get();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
+	}
+	
+	
+
+	/**
+	 * Uploads the video In FileSystem and Database
+	 * Create : Upload Document
+	 */
+	public String uploadVideo(MultipartFile multiple) {
+		return uploadFile(multiple);
 	}
 
 
-	@Override
-	public String uploadVideo(MultipartFile multiple) {
+
+
+	/**
+	 * Removes the video In FileSystem and Database : 
+	 * Remove UPLOAD Document
+	 */
+	public String removeVideo(String ref) {
+		return removeUpload(ref);
+	}
+
+
+	/**
+	 * Uploads the  file and database system
+	 */
+	private String uploadFile(MultipartFile multiple) {
 		String result = null;
 		try {
 			ExecutorService service = org.hawks.utils.util.getExecutor();
 			Future<Upload> runnable = service.submit(()->{
-				File f  = uploadFile(multiple);
+				File f  = uploadFileToFileSystem(multiple);
 				Upload upload  = new Upload();
 				String filePath = f.getAbsolutePath();
 				upload.setFileLocation(DATABASEUPLOAD+filePath.substring(filePath.lastIndexOf('/')+1));
+				upload.setFileOriginalPath(filePath);
+				upload.setMediaType(filePath.substring(filePath.lastIndexOf('.')+1));
 				dao.create(upload);
 				return upload;
 			});
@@ -93,15 +191,20 @@ public class VideoServiceImpl implements VideoService{
 		return result;
 	}
 
-	@Override
-	public String removeVideo(String ref) {
+	/**
+	 * Remove Files in file system and database 
+	 */
+	public String removeUpload(String ref) {
 		String result = null;
 		try {
+			
 			ExecutorService service = org.hawks.utils.util.getExecutor();
 			Future<String> runnable = service.submit(()->{
-				Upload up = new Upload();
-				up.set_id(ref);
-				dao.delete(up);
+				Query query = new Query(Criteria.where("_id").is(ref));
+				Upload upload = (Upload) dao.readWithQuery(query, Upload.class);
+				File f  = new File(upload.getFileOriginalPath());
+				if(f.exists()) System.out.println("file is deleted: "+f.delete());
+				dao.delete(upload);
 				return ref;
 			});
 			result = runnable.get();
@@ -113,8 +216,12 @@ public class VideoServiceImpl implements VideoService{
 
 
 	
-	
-	private File uploadFile(MultipartFile mul) {
+	/**
+	 * Uploads The File 
+	 * @param mul
+	 * @return File
+	 */
+	private File uploadFileToFileSystem(MultipartFile mul) {
 		try {
 			String originalFileName = mul.getOriginalFilename();
 			String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
@@ -131,5 +238,9 @@ public class VideoServiceImpl implements VideoService{
 		}
 		
 	}
+
+
+
+
 
 }

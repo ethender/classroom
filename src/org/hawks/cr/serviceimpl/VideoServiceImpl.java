@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 
 @Service("videoservice")
+@SuppressWarnings("unchecked")
 public class VideoServiceImpl implements VideoService{
 	
 	@Autowired

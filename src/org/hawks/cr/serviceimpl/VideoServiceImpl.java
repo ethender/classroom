@@ -40,6 +40,7 @@ public class VideoServiceImpl implements VideoService{
 				return request;
 			});
 			result = runnable.get();
+			service.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -66,6 +67,7 @@ public class VideoServiceImpl implements VideoService{
 				return rquest;
 			});
 			result = runnable.get();
+			service.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -81,9 +83,10 @@ public class VideoServiceImpl implements VideoService{
 			ExecutorService service = org.hawks.utils.util.getExecutor();
 			Future<Video> runnable = service.submit(()->{
 				Query query = new Query(Criteria.where("_id").is(ref));
-				return (Video) dao.readWithQuery(query, Video.class);
+				return ((List<Video>) dao.readWithQuery(query, Video.class)).get(0);
 			});
 			result = runnable.get();
+			service.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -102,6 +105,7 @@ public class VideoServiceImpl implements VideoService{
 				return (List<Video>) dao.readWithQuery(query, Video.class);
 			});
 			result = runnable.get();
+			service.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -120,6 +124,7 @@ public class VideoServiceImpl implements VideoService{
 				return (List<Video>) dao.readWithQuery(query, Video.class);
 			});
 			result = runnable.get();
+			service.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -139,6 +144,7 @@ public class VideoServiceImpl implements VideoService{
 				return video;
 			});
 			result = runnable.get();
+			service.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -186,6 +192,7 @@ public class VideoServiceImpl implements VideoService{
 			});
 			Upload up = runnable.get();
 			result = up.get_id();
+			service.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -209,6 +216,7 @@ public class VideoServiceImpl implements VideoService{
 				return ref;
 			});
 			result = runnable.get();
+			service.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}

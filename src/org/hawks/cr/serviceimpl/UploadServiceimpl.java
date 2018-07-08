@@ -3,6 +3,7 @@ package org.hawks.cr.serviceimpl;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.*;
 
 import org.hawks.cr.daoimpl.DAOImpl;
 import org.hawks.cr.models.Upload;
@@ -13,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service("uploadservice")
+@SuppressWarnings("unchecked")
 public class UploadServiceimpl implements UploadService{
 
 	
@@ -33,6 +35,7 @@ public class UploadServiceimpl implements UploadService{
 			});
 			
 			result = runnable.get();
+			service.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -48,10 +51,11 @@ public class UploadServiceimpl implements UploadService{
 			ExecutorService service = org.hawks.utils.util.getExecutor();
 			Future<Upload> runnable = service.submit(()->{
 				Query query = new Query(Criteria.where("_id").is(ref));
-				return (Upload) dao.readWithQuery(query, Upload.class);
+				return ((List<Upload>) dao.readWithQuery(query, Upload.class)).get(0);
 			});
 			
 			result = runnable.get();
+			service.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -71,6 +75,7 @@ public class UploadServiceimpl implements UploadService{
 			});
 			
 			result = runnable.get();
+			service.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}

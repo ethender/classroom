@@ -3,7 +3,7 @@ package org.hawks.cr.service;
 import java.util.*;
 import org.hawks.cr.models.Notes;
 
-public interface NotesMaterial {
+public interface NotesService {
 
 	
 	public Notes createNotes(Notes notes);

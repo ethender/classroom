@@ -35,6 +35,7 @@ public class LectureServiceImpl implements LectureService{
 				return lecture;
 			});
 			result = runnable.get();
+			executor.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -57,6 +58,7 @@ public class LectureServiceImpl implements LectureService{
 				return lecture;
 			});
 			result = runnable.get();
+			executor.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -79,6 +81,7 @@ public class LectureServiceImpl implements LectureService{
 				return lecture;
 			});
 			result = runnable.get();
+			executor.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -99,6 +102,7 @@ public class LectureServiceImpl implements LectureService{
 				return lect.get(0);
 			});
 			result = runnable.get();
+			executor.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -119,6 +123,7 @@ public class LectureServiceImpl implements LectureService{
 				
 			});
 			result = runnable.get();
+			executor.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -138,6 +143,7 @@ public class LectureServiceImpl implements LectureService{
 				
 			});
 			result = runnable.get();
+			executor.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}
@@ -157,6 +163,7 @@ public class LectureServiceImpl implements LectureService{
 				return lecture;
 			});
 			result = runnable.get();
+			executor.shutdown();
 		}catch(InterruptedException | ExecutionException ex) {
 			System.out.println("Error ocurred: "+ex.getMessage());
 		}

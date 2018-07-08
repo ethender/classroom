@@ -21,7 +21,7 @@ public interface TaskService {
 	
 	public List<Task> readTaskThroughUserAndLecRef(String user, String lecRef);
 	
-	public List<Task> readTaskThroughUserAndClassRef(String User, String classRef);
+	public List<Task> readTaskThroughUserAndClassRef(String user, String classRef);
 	
 	public Task deleteTask(Task task);
 	

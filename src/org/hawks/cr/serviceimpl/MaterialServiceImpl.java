@@ -92,7 +92,7 @@ public class MaterialServiceImpl implements MaterialService{
 		return result;
 	}
 
-	@Override
+	
 	public List<Material> readMaterialThroughClassRef(String classRef) {
 		List<Material> result = null;
 		try {
@@ -109,7 +109,7 @@ public class MaterialServiceImpl implements MaterialService{
 		return result;
 	}
 
-	@Override
+	
 	public Material deleteMaterial(Material mat) {
 		Material result = null;
 		try {

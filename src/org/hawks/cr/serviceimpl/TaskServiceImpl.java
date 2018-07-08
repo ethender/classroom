@@ -1,60 +1,163 @@
 package org.hawks.cr.serviceimpl;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
+import org.hawks.cr.daoimpl.DAOImpl;
 import org.hawks.cr.models.Task;
 import org.hawks.cr.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 @Service("taskservice")
+@SuppressWarnings("unchecked")
 public class TaskServiceImpl implements TaskService{
 
-	@Override
+	@Autowired
+	private DAOImpl dao;
+	
 	public Task createTask(Task task) {
-		// TODO Auto-generated method stub
-		return null;
+		Task result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<Task> runnable  = service.submit(()->{
+				dao.create(task);
+				return task;
+			});
+			result = runnable.get();
+			service.shutdown();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
 	}
 
-	@Override
+	
 	public Task updateTask(Task task) {
-		// TODO Auto-generated method stub
-		return null;
+		Task result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<Task> runnable  = service.submit(()->{
+				Query query = new Query(Criteria.where("_id").is(task.get_id()));
+				Update update = new Update();
+				update.set("isTaskComplete", task.isTaskComplete());
+				dao.update(query, update, Task.class);
+				return task;
+			});
+			result = runnable.get();
+			service.shutdown();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
 	}
 
-	@Override
+	
 	public Task readTask(String ref) {
-		// TODO Auto-generated method stub
-		return null;
+		Task result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<Task> runnable  = service.submit(()->{
+				Query query = new Query(Criteria.where("_id").is(ref));
+				return ((List<Task>) dao.readWithQuery(query, Task.class)).get(0);
+			});
+			result = runnable.get();
+			service.shutdown();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
 	}
 
-	@Override
+	
 	public List<Task> readTaskThroughUser(String user) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Task> result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<List<Task>> runnable  = service.submit(()->{
+				Query query = new Query(Criteria.where("user").is(user)
+						.and("isTaskComplete").is((new Boolean(true))));
+				return ((List<Task>) dao.readWithQuery(query, Task.class));
+			});
+			result = runnable.get();
+			service.shutdown();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
 	}
 
-	@Override
+	
 	public List<Task> readTaskThroughUserAndLecRef(String user, String lecRef) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Task> result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<List<Task>> runnable  = service.submit(()->{
+				Query query = new Query(Criteria.where("user").is(user).and("lecRef").is(lecRef));
+				return ((List<Task>) dao.readWithQuery(query, Task.class));
+			});
+			result = runnable.get();
+			service.shutdown();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
 	}
 
-	@Override
-	public List<Task> readTaskThroughUserAndClassRef(String User, String classRef) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public List<Task> readTaskThroughUserAndClassRef(String user, String classRef) {
+		List<Task> result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<List<Task>> runnable  = service.submit(()->{
+				Query query = new Query(Criteria.where("user").is(user).and("classRef").is(classRef));
+				return ((List<Task>) dao.readWithQuery(query, Task.class));
+			});
+			result = runnable.get();
+			service.shutdown();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
 	}
 
-	@Override
+	
 	public Task deleteTask(Task task) {
-		// TODO Auto-generated method stub
-		return null;
+		Task result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<Task> runnable  = service.submit(()->{
+				dao.delete(task);
+				return task;
+			});
+			result = runnable.get();
+			service.shutdown();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
 	}
 
-	@Override
+	
 	public List<Task> getAllTasksFromUser(String user) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Task> result = null;
+		try {
+			ExecutorService service = org.hawks.utils.util.getExecutor();
+			Future<List<Task>> runnable  = service.submit(()->{
+				Query query = new Query(Criteria.where("user").is(user));
+				return ((List<Task>) dao.readWithQuery(query, Task.class));
+			});
+			result = runnable.get();
+			service.shutdown();
+		}catch(InterruptedException | ExecutionException ex) {
+			System.out.println("Error ocurred: "+ex.getMessage());
+		}
+		return result;
 	}
 
 }

@@ -40,33 +40,33 @@ public class LectureController {
 	 * @return
 	 */
 
-	@RequestMapping(path="/lecture/video/upload",headers="Content-Type= multipart/form-data",method=RequestMethod.POST)
+	@RequestMapping(path="/video/upload",headers="Content-Type= multipart/form-data",method=RequestMethod.POST)
 	public @ResponseBody String getUploadVideo(@RequestParam("file") MultipartFile file) {
 		System.out.println("comming to upload video");
 		return videoservice.uploadVideo(file);
 	}
 	
-	@RequestMapping(path="/lecture/video",method=RequestMethod.POST,produces="application/json",consumes="application/json")
+	@RequestMapping(path="/video",method=RequestMethod.POST,produces="application/json",consumes="application/json")
 	public @ResponseBody Object getCreateVideo(@RequestBody Video video) {
 		return videoservice.createVideo(video);
 	}
 	
-	@RequestMapping(path="/lecture/video",method=RequestMethod.PUT,produces="application/json",consumes="application/json")
+	@RequestMapping(path="/video",method=RequestMethod.PUT,produces="application/json",consumes="application/json")
 	public @ResponseBody Object getUpdateVideo(@RequestBody Video video) {
 		return videoservice.updateVideo(video);
 	}
 	
-	@RequestMapping(path="/lecture/video/ref/{refnum}",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(path="/video/ref/{refnum}",method=RequestMethod.GET,produces="application/json")
 	public @ResponseBody Object getVideoByRef(@PathVariable("refnum") String ref) {
 		return videoservice.readVideoByRef(ref);
 	}
 	
-	@RequestMapping(path="/lecture/video/class/{refnum}",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(path="/video/class/{refnum}",method=RequestMethod.GET,produces="application/json")
 	public @ResponseBody Object getVideoByClassRef(@PathVariable("refnum") String ref) {
 		return videoservice.readVideoByRef(ref);
 	}
 	
-	@RequestMapping(path="/lecture/video/lec/{refnum}",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(path="/video/lec/{refnum}",method=RequestMethod.GET,produces="application/json")
 	public @ResponseBody Object getVideoByLectureRef(@PathVariable("refnum") String ref) {
 		return videoservice.readVideoByRef(ref);
 	}
@@ -79,19 +79,20 @@ public class LectureController {
 	 * Lecture service
 	 */
 	
-	@RequestMapping(path="/lecture",method=RequestMethod.POST,produces="application/json",consumes="application/json")
+	@RequestMapping(path="/create",method=RequestMethod.POST,produces="application/json",consumes="application/json")
 	public @ResponseBody Object createLecture(@RequestBody Lecture lect) {
+		lect.setDateCeated(org.hawks.utils.util.getDateNow());
 		lectureservice.createLecture(lect);
 		return lect;
 	}
 	
-	@RequestMapping(path="/lecture",method=RequestMethod.PUT,produces="application/json",consumes="application/json")
+	@RequestMapping(path="/update",method=RequestMethod.PUT,produces="application/json",consumes="application/json")
 	public @ResponseBody Object updateLecture(@RequestBody Lecture lect) {
 		lectureservice.updateLecture(lect);
 		return lect;
 	}
 	
-	@RequestMapping(path="/lecture/{refnum}/{views}",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(path="/{refnum}/{views}",method=RequestMethod.GET,produces="application/json")
 	public @ResponseBody Object updateLectureView(@PathVariable("refnum") String ref, @PathVariable("views") int views) {
 		Lecture lect =  new Lecture();
 		lect.set_id(ref);
@@ -101,17 +102,17 @@ public class LectureController {
 	}
 	
 	
-	@RequestMapping(path="/lecture/search/{name}",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(path="/search/{name}",method=RequestMethod.GET,produces="application/json")
 	public @ResponseBody Object searchByName(@PathVariable("name") String name) {
 		return lectureservice.searchLectureByName(name);
 	}
 	
-	@RequestMapping(path="/lecture/searchref/{ref}",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(path="/searchref/{ref}",method=RequestMethod.GET,produces="application/json")
 	public @ResponseBody Object searchByRef(@PathVariable("ref") String ref) {
 		return lectureservice.searchLecturesByClass(ref);
 	}
 	
-	@RequestMapping(path="/lecture/all",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(path="/all",method=RequestMethod.GET,produces="application/json")
 	public @ResponseBody Object allClasses() {
 		return lectureservice.searchAllLectures();
 	}

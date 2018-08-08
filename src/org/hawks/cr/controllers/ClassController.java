@@ -30,12 +30,12 @@ public class ClassController {
 	}
 	
 	
-	@RequestMapping(path="/class/{classname}",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(path="/{classname}",method=RequestMethod.GET,produces="application/json")
 	public Object getClass(@PathVariable("classname") String name) {
 		return classservice.searchClassThroughName(name);
 	}
 	
-	@RequestMapping(path="/class/by/{instructor}",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(path="/by/{instructor}",method=RequestMethod.GET,produces="application/json")
 	public Object getClassesByInstructor(@PathVariable("instructor") String instructor) {
 		return classservice.searchClassThroughUsername(instructor);
 	}

@@ -21,7 +21,12 @@
 
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!--
+			Max File Size is   256 
 		<property name="maxUploadSize" value="268435456" />
+		-->
+	<!--  Maximum File upload size is 1 GB -->
+		<property name="maxUploadSize" value="1073741824" />
 	</bean>
 
 </beans>

@@ -230,7 +230,7 @@ public class VideoServiceImpl implements VideoService{
 	 * @param mul
 	 * @return File
 	 */
-	private File uploadFileToFileSystem(MultipartFile mul) {
+	private  File uploadFileToFileSystem(MultipartFile mul) {
 		try {
 			String originalFileName = mul.getOriginalFilename();
 			String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
